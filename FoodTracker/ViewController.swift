@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     // MARK: properties
     @IBOutlet weak var mealNameLabel: UILabel!
     @IBOutlet weak var naemTextField: UITextField!
@@ -25,11 +25,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK: actions
-    @IBAction func setDefaultLabelText(sender: UIButton) {
-        mealNameLabel.text = "Default Text"
-    }
-    
     // MARK: UITextFieldDelegate
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         
@@ -43,5 +38,30 @@ class ViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidEndEditing(textField: UITextField) {
         mealNameLabel.text = textField.text
     }
+    
+    // MARK: UIImagePickerControllerDelegate
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        let selectedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        photoimageView.image = selectedImage
+        dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    // MARK: actions
+    @IBAction func setDefaultLabelText(sender: UIButton) {
+        mealNameLabel.text = "Default Text"
+    }
+    
+    @IBAction func selectImageFromLibrary(sender: UITapGestureRecognizer) {
+        naemTextField.resignFirstResponder()
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.sourceType = .PhotoLibrary
+        imagePickerController.delegate = self
+        presentViewController(imagePickerController, animated: true, completion: nil)
+        
+    }
+
 }
 
