@@ -11,6 +11,18 @@ import XCTest
 
 class FoodTrackerTests: XCTestCase {
     
+    // MARK: FoodTracker Tests
+    func testMealInitialization() {
+        let potentialItem = Meal(name: "Newest meal", photo: nil, rating: 5)
+        XCTAssertNotNil(potentialItem)
+        
+        let noName = Meal(name: "", photo: nil, rating: 0)
+        XCTAssertNil(noName, "Empty name is invalid")
+        
+        let badRating = Meal(name: "Realy bad rating", photo: nil, rating: -1)
+        XCTAssertNil(badRating)
+    }
+    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -32,5 +44,6 @@ class FoodTrackerTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
+
     
 }
