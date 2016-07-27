@@ -21,11 +21,13 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     var meal: Meal?
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var cancel: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         naemTextField.delegate = self
+        checkValidName()
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,6 +46,18 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
+        checkValidName()
+        navigationItem.title = naemTextField.text
+    }
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        saveButton.enabled = false
+    }
+    
+    func checkValidName() {
+        // Disable the save button if the text filed is empty
+        let text = naemTextField.text ?? ""
+        saveButton.enabled = !text.isEmpty
     }
     
     // MARK: UIImagePickerControllerDelegate
@@ -68,6 +82,9 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     }
 
     // MARK: Navigation
+    @IBAction func cancel(sender: UIBarButtonItem) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if saveButton === sender {
             let name = naemTextField.text ?? ""
