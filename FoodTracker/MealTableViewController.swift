@@ -69,12 +69,36 @@ class MealTableViewController: UITableViewController {
     }
     @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
         if let sourceViewController = sender.sourceViewController as? MealViewController, meal = sourceViewController.meal {
-            let newIndexPath = NSIndexPath(forRow: meals.count, inSection: 0)
-            meals.append(meal)
-            tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Bottom)
+            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+                meals[selectedIndexPath.row] = meal
+                tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .None)
+            }
+            else {
+                let newIndexPath = NSIndexPath(forRow: meals.count, inSection: 0)
+                meals.append(meal)
+                tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Bottom)
+            }
         }
     }
 
+    // MARK: Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "ShowDetail" {
+            
+            // Get the cell that generated this segue.
+            if let selectedMealCell = sender as? MealTableViewCell {
+                let mealDetailController = segue.destinationViewController as! MealViewController
+                
+                // Fecth the selected Meal
+                let indexPath = tableView.indexPathForCell(selectedMealCell)!
+                let selectedMeal = meals[indexPath.row]
+                mealDetailController.meal = selectedMeal
+            }
+        }
+        else if segue.identifier == "addItem" {
+            print("Adding new meal")
+        }
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
